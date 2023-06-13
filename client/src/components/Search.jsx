@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
+import $ from 'jquery';
 
-const Search = ({ onSearch }) => {
+const Search = ({ term, setTerm }) => {
 
-  const[term, setTerm] = useState('')
+  // const[term, setTerm] = useState('')
 
   const onChange = (e) => {
     setTerm(e.target.value);
   }
 
   const search = () => {
-    onSearch(term);
+    //send search term(e) inside get request to GITHUB API
+    $.ajax({
+      method: 'POST',
+      url: 'http://localhost:1128/repos',
+      contentType: 'application/json',
+      userName: `${term}`,
+      data: JSON.stringify(term),
+      success: console.log('request received'),
+      error:  (err) => console.log(err)
+    });
+
   }
 
   return (
