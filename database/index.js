@@ -15,8 +15,10 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'database connection error'));
 db.once('open', () => {
   console.log('database connection successful');
-  let Repo = mongoose.model('Repo', repoSchema);
-  console.log(Repo);
+  // let Repo = mongoose.model('Repo', repoSchema);
+  // let repoRecord = new Repo();
+  // console.log(Repo);
+  // console.log(repoRecord);
 });
 
 let save = (repos) => {
@@ -30,10 +32,16 @@ let save = (repos) => {
       updated_at: repos[0].updated_at,
       pushed_at: repos[0].pushed_at
     };
-
-    console.log(repoData);
-
-
+    let Repo = mongoose.model('Repo', repoSchema);
+    console.log('after creation: ', typeof(Repo));
+    let repoRecord = new Repo(repoData);
+    repoRecord.save( (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${res} successfully added to the databse`);
+      }
+    })
     // repos.forEach((element, key) => {
     //   const currentRepo = new Repo({element})
     //   console.log('currentRep: ', currentRepo)
@@ -44,9 +52,21 @@ let save = (repos) => {
     // });
 }
 
+let retrieve = () => {
+  Repo.find({}, (err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('returning requested records: ')
+      return res;
+    }
+  })
+}
+
 
 
 
 
 
 module.exports.save = save;
+module.exports.retrieve = retrieve;

@@ -1,8 +1,9 @@
 const express = require('express');
 let app = express();
 const path = require('path');
-const getRepos = require('../helpers/github').getReposByUsername;
+const getOnlineRepos = require('../helpers/github').getReposByUsername;
 const saveRepos = require('../database/index').save;
+const getDBRepos = require('../database/index').retrieve;
 // var router = express.Router();
 
 // TODO - your code here!
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.post('/repos', function (req, res) {
-  getRepos(req.body.username, saveRepos);
+  getOnlineRepos(req.body.username, saveRepos);
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -31,8 +32,10 @@ app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
   // res.render('index');
-  console.log(path.join(path.resolve(),'client','dist','index.html'))
+  //console.log(path.join(path.resolve(),'client','dist','index.html'))
   res.sendFile(path.join(path.resolve(),'client','dist','index.html'));
+  let storedRepos = getDBRepos;
+  console.log(storedRepos);
 
   //res.send('Hello World!');
 });
