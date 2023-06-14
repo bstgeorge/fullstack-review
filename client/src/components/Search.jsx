@@ -14,9 +14,7 @@ const Search = ({ term, setTerm }) => {
     $.ajax({
       method: 'POST',
       url: 'http://localhost:1128/repos',
-      contentType: 'application/json',
-      userName: `${term}`,
-      data: JSON.stringify(term),
+      data: {username: term},
       success: console.log('request received'),
       error:  (err) => console.log(err)
     });
